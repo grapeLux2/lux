@@ -178,7 +178,7 @@ void MasternodeManager::updateNodeList()
 int active = mn.IsEnabled();
 	if (active) {
 		string ACT = "YES";
-		)
+	}
     // populate list
     // Address, Rank, Active, Active Seconds, Last Seen, Pub Key
     QTableWidgetItem *activeItem = new QTableWidgetItem(QString::fromStdString(ACT));
@@ -194,7 +194,7 @@ int active = mn.IsEnabled();
     QTableWidgetItem *pubkeyItem = new QTableWidgetItem(QString::fromStdString(EncodeDestination(address1)));
 
         if (strCurrentFilter != "") {
-            strToFilter = activeItem->text() + " " +
+            strToFilter = ACT->text() + " " +
                           addressItem->text() + " " +
                           rankItem->text() + " " +
                           activeSecondsItem->text() + " " +
@@ -206,7 +206,7 @@ int active = mn.IsEnabled();
         ui->tableWidget->insertRow(0);
         ui->tableWidget->setItem(0, 0, addressItem);
         ui->tableWidget->setItem(0, 1, rankItem);
-        ui->tableWidget->setItem(0, 2, activeItem);
+        ui->tableWidget->setItem(0, 2, ACT);
         ui->tableWidget->setItem(0, 3, activeSecondsItem);
         ui->tableWidget->setItem(0, 4, lastSeenItem);
         ui->tableWidget->setItem(0, 5, pubkeyItem);
