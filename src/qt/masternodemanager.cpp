@@ -175,7 +175,7 @@ void MasternodeManager::updateNodeList()
         if (ShutdownRequested()) return;
 	    int ACT;
 int active = mn.IsEnabled();
-	if (active){
+	if (active) {
 		int ACT = YES;
 		)
     // populate list
