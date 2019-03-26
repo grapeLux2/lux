@@ -181,7 +181,7 @@ int active = mn.IsEnabled();
 		)
     // populate list
     // Address, Rank, Active, Active Seconds, Last Seen, Pub Key
-    QTableWidgetItem *activeItem = new QTableWidgetItem(QString::number(ACT));
+    QTableWidgetItem *activeItem = new QTableWidgetItem(QString::fromStdString(ACT));
     QTableWidgetItem *addressItem = new QTableWidgetItem(QString::fromStdString(mn.addr.ToString()));
     QTableWidgetItem *rankItem = new QTableWidgetItem(QString::number(GetMasternodeRank(mn.vin, chainActive.Height())));
     QTableWidgetItem *activeSecondsItem = new QTableWidgetItem(seconds_to_DHMS((qint64)(mn.lastTimeSeen - mn.now)));
