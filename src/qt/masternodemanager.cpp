@@ -173,10 +173,14 @@ void MasternodeManager::updateNodeList()
     for (CMasterNode &mn : vecMasternodes)
     {
         if (ShutdownRequested()) return;
-
+	    int ACT = 0;
+int active = mn.IsEnabled()
+	if (active){
+		ACT = YES;
+		)
     // populate list
     // Address, Rank, Active, Active Seconds, Last Seen, Pub Key
-    QTableWidgetItem *activeItem = new QTableWidgetItem(QString::number(mn.IsEnabled()));
+    QTableWidgetItem *activeItem = new QTableWidgetItem(QString::number(ACT));
     QTableWidgetItem *addressItem = new QTableWidgetItem(QString::fromStdString(mn.addr.ToString()));
     QTableWidgetItem *rankItem = new QTableWidgetItem(QString::number(GetMasternodeRank(mn.vin, chainActive.Height())));
     QTableWidgetItem *activeSecondsItem = new QTableWidgetItem(seconds_to_DHMS((qint64)(mn.lastTimeSeen - mn.now)));
