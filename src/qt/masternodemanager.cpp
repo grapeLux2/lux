@@ -173,10 +173,10 @@ void MasternodeManager::updateNodeList()
     for (CMasterNode &mn : vecMasternodes)
     {
         if (ShutdownRequested()) return;
-	    int ACT = 0;
+	    int ACT;
 int active = mn.IsEnabled();
 	if (active){
-		ACT = YES;
+		int ACT = YES;
 		)
     // populate list
     // Address, Rank, Active, Active Seconds, Last Seen, Pub Key
