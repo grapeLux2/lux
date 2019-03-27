@@ -144,14 +144,16 @@ public:
     {
         return enabled == 1;
     }
-	    char IsEnabled_text()
+	    const char * IsEnabled_text()
     {
 	if (enabled == 1){
-		return YES;
+		const char *x = "YES";
+		return x;
 	} else{
-	        return NO;
+		const char *x = "YES";
+		return x;
 	}
-	    return fail;
+	    return 4;
     }
 
     int GetMasternodeInputAge()
