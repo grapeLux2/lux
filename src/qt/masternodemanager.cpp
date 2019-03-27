@@ -17,7 +17,7 @@
 #include <fstream>
 
 using namespace std;
-
+string ACT = "FAIL";
 #include <QAbstractItemDelegate>
 #include <QPainter>
 #include <QTimer>
@@ -172,15 +172,15 @@ void MasternodeManager::updateNodeList()
 
     for (CMasterNode &mn : vecMasternodes)
     {
-        if (ShutdownRequested()) return;
-	    string ACT = "FAIL";
+        if (ShutdownRequested()) {return;}
+	    
 int active = mn.IsEnabled();
 	if (active) {
 		string ACT = "YES";
 	}
     // populate list
     // Address, Rank, Active, Active Seconds, Last Seen, Pub Key
-    QTableWidgetItem *activeItem = new QTableWidgetItem(ACT);
+    QTableWidgetItem *activeItem = new QTableWidgetItem(QString::fromStdString(ACT));
     QTableWidgetItem *addressItem = new QTableWidgetItem(QString::fromStdString(mn.addr.ToString()));
     QTableWidgetItem *rankItem = new QTableWidgetItem(QString::number(GetMasternodeRank(mn.vin, chainActive.Height())));
     QTableWidgetItem *activeSecondsItem = new QTableWidgetItem(seconds_to_DHMS((qint64)(mn.lastTimeSeen - mn.now)));
