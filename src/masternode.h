@@ -144,6 +144,15 @@ public:
     {
         return enabled == 1;
     }
+	    char IsEnabled_text()
+    {
+	if (enabled == 1){
+		return YES;
+	} else{
+	        return NO;
+	}
+	    return fail;
+    }
 
     int GetMasternodeInputAge()
     {
