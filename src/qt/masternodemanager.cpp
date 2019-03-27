@@ -173,7 +173,6 @@ void MasternodeManager::updateNodeList()
     for (CMasterNode &mn : vecMasternodes)
     {
         if (ShutdownRequested()) return;
-	    using namespace std;
 	    string ACT = "FAIL";
 int active = mn.IsEnabled();
 	if (active) {
