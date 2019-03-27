@@ -147,10 +147,11 @@ public:
     char IsEnabled_text()
     {
 	if (enabled == 1){
-		return YES
+		return YES;
 	} else{
-	        return NO
+	        return NO;
 	}
+	    return fail;
     }
 
     int GetMasternodeInputAge()
