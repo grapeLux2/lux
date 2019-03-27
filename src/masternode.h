@@ -153,7 +153,8 @@ public:
 		const char *x = "YES";
 		return x;
 	}
-	    return 4;
+		const char *x = "FAILURE";
+		return x;
     }
 
     int GetMasternodeInputAge()
