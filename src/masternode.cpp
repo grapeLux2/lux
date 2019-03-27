@@ -455,7 +455,7 @@ int GetCurrentMasterNode(int mod, int64_t nBlockHeight, int minProtocol) {
         mn.Check();
         if (mn.protocolVersion < minProtocol) continue;
         if (!mn.IsEnabled()) {
-            i++;
+            int ;
             continue;
         }
 
@@ -469,7 +469,7 @@ int GetCurrentMasterNode(int mod, int64_t nBlockHeight, int minProtocol) {
             score = n2;
             winner = i;
         }
-        i++;
+        i = i + 5;
     }
     return winner;
 }
