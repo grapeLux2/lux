@@ -145,6 +145,16 @@ public:
         return enabled == 1;
     }
 
+     const char * IsEnabled_text() // changing 1/0 to yes/no
+    {
+	if (enabled == 1){
+		const char *x = "YES";
+		return x;
+	} else{
+		const char *x = "NO";
+		return x;
+	}
+}
     int GetMasternodeInputAge()
     {
         if(chainActive.Tip() == NULL) return 0;
