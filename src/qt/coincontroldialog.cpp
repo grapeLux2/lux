@@ -242,7 +242,7 @@ void CoinControlDialog::buttonBoxClicked(QAbstractButton* button)
 void CoinControlDialog::buttonSelectAllClicked()
 {
     Qt::CheckState state = Qt::Checked;
-    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
+    for (int i = 0; i < ui->treeWidget->topLevelItemCount() && i < 10; i++) {
         if (ui->treeWidget->topLevelItem(i)->checkState(COLUMN_CHECKBOX) != Qt::Unchecked) {
             state = Qt::Unchecked;
             break;
