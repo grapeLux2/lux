@@ -49,6 +49,7 @@ In addition, without Luxgate and PMN, Bitcoin and Ethereum cannot interact with 
 | Block Time | `60s` |
 | PoW Block Time | `120s`   |
 | PoW Reward | `10 LUX` |
+| PoS Block Time | `120s`   |
 | PoS Reward | `1 LUX` |
 | Stake Time | `36 hours` | 
 | Masternode Requirement | `16,120 LUX` |
