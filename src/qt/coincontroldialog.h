@@ -16,7 +16,8 @@
 #include <QString>
 #include <QStringList>
 #include <QTreeWidgetItem>
-
+#include <QAbstractItemModel>
+#include <QTableView>
 class WalletModel;
 class ClientModel;
 class PlatformStyle;
@@ -64,8 +65,10 @@ private:
     WalletModel* model;
     ClientModel* clientModel;
     int sortColumn;
+    int index;
+    int item;
     Qt::SortOrder sortOrder;
-
+    
     QMenu* contextMenu;
     QTreeWidgetItem* contextMenuItem;
     QAction* copyTransactionHashAction;
@@ -116,9 +119,16 @@ private Q_SLOTS:
     void headerSectionClicked(int);
     void buttonBoxClicked(QAbstractButton*);
     void buttonSelectAllClicked();
+    void HideInputAutoSelection();
+    void ShowInputAutoSelection();
+    void greater();
+    void Less();
+    void Equal();
+    void select_50();
+    void select_100();
+    void select_250();
     void buttonToggleLockClicked();
     void updateLabelLocked();
-
 public Q_SLOTS:
     void updateInfoInDialog();
 };
