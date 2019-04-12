@@ -50,14 +50,16 @@ MasternodeManager::MasternodeManager(QWidget *parent) :
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateNodeList()));
-    timer->start(1000);
+    timer->start(20000);
     fFilterUpdated = true;
     nTimeFilterUpdated = GetTime();
     updateNodeList();
+    connect(ui->filterLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(wait()));
 }
 
 MasternodeManager::~MasternodeManager()
 {
+    delete timer;
     delete ui;
 }
 
@@ -146,17 +148,22 @@ static QString seconds_to_DHMS(quint32 duration)
   return res.sprintf("%dd %02dh:%02dm:%02ds", days, hours, minutes, seconds);
 }
 
+void MasternodeManager::wait()
+{
+QTimer::singleShot(3000, this, SLOT(updateNodeList()));
+}
+
 void MasternodeManager::updateNodeList()
 {
+
     static int64_t nTimeListUpdated = GetTime();
 
     // to prevent high cpu usage update only once in MASTERNODELIST_UPDATE_SECONDS seconds
     // or MASTERNODELIST_FILTER_COOLDOWN_SECONDS seconds after filter was last changed
     int64_t nSecondsToWait = fFilterUpdated ? nTimeFilterUpdated - GetTime() + MASTERNODELIST_FILTER_COOLDOWN_SECONDS : nTimeListUpdated - GetTime() + MASTERNODELIST_UPDATE_SECONDS;
 
-    if (fFilterUpdated) ui->countLabel->setText(QString::fromStdString(strprintf("Please wait... %d", nSecondsToWait)));
-    if (nSecondsToWait > 0) return;
-
+  //  if (fFilterUpdated) ui->countLabel->setText(QString::fromStdString(strprintf("Please wait... %d", nSecondsToWait)));
+ //   if (nSecondsToWait > 0) return;
     nTimeListUpdated = GetTime();
     fFilterUpdated = false;
 
@@ -176,7 +183,7 @@ void MasternodeManager::updateNodeList()
 
     // populate list
     // Address, Rank, Active, Active Seconds, Last Seen, Pub Key
-    QTableWidgetItem *activeItem = new QTableWidgetItem(QString::number(mn.IsEnabled()));
+    QTableWidgetItem *activeItem = new QTableWidgetItem(mn.IsEnabled() ? tr("yes") : tr("no"));
     QTableWidgetItem *addressItem = new QTableWidgetItem(QString::fromStdString(mn.addr.ToString()));
     QTableWidgetItem *rankItem = new QTableWidgetItem(QString::number(GetMasternodeRank(mn.vin, chainActive.Height())));
     QTableWidgetItem *activeSecondsItem = new QTableWidgetItem(seconds_to_DHMS((qint64)(mn.lastTimeSeen - mn.now)));
