@@ -169,10 +169,10 @@ bool CWalletDB::WriteOrderPosNext(int64_t nOrderPosNext)
 }
 
 // presstab HyperStake
-bool CWalletDB::WriteStakeSplitThreshold(int64_t nStakeSplitThreshold)
+bool CWalletDB::WriteStakeSplitThreshold(int64_t nStakeCombineThreshold)
 {
     nWalletDBUpdateCounter++;
-    return Write(std::string("stakeSplitThreshold"), nStakeSplitThreshold);
+    return Write(std::string("stakeSplitThreshold"), nStakeCombineThreshold);
 }
 
 //presstab HyperStake
