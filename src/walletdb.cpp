@@ -168,13 +168,14 @@ bool CWalletDB::WriteOrderPosNext(int64_t nOrderPosNext)
     return Write(std::string("orderposnext"), nOrderPosNext);
 }
 
+/*
 // presstab HyperStake
 bool CWalletDB::WriteStakeSplitThreshold(int64_t nStakeCombineThreshold)
 {
     nWalletDBUpdateCounter++;
     return Write(std::string("stakeSplitThreshold"), nStakeCombineThreshold);
 }
-
+*/
 //presstab HyperStake
 bool CWalletDB::WriteMultiSend(std::vector<std::pair<std::string, int> > vMultiSend)
 {
