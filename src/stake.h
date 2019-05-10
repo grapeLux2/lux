@@ -74,6 +74,7 @@ class Stake : StakeKernel
     int64_t nLastStakeTime;
     int64_t nLastSelectTime;
     int64_t nSelectionPeriod;
+    //int64_t nStakeSplitThreshold;
     int64_t nStakeCombineThreshold;
     unsigned int nStakeMinAge;
     unsigned int nHashInterval;
