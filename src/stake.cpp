@@ -90,7 +90,7 @@ Stake::Stake()
     , nLastStakeTime(GetAdjustedTime())
     , nLastSelectTime(GetTime())
     , nSelectionPeriod(0)
-    , nStakeSplitThreshold(GetStakeCombineThreshold())
+    , nStakeCombineThreshold(GetStakeCombineThreshold())
     , nStakeMinAge(0)
     , nHashInterval(0)
     , nReserveBalance(0)
@@ -484,7 +484,7 @@ bool Stake::CheckHashOld(const CBlockIndex* pindexPrev, unsigned int nBits, cons
     CDataStream ss(SER_GETHASH, 0);
     ss << nStakeModifier << nTimeBlockFrom << txPrev.nTime << prevout.hash << prevout.n << nTimeTx;
     if (ENABLE_ADVANCED_STAKING && (GetBoolArg("-regtest", false) || nStakeModifierHeight >= ADVANCED_STAKING_HEIGHT)) {
-        ss << nHashInterval << nSelectionPeriod << nStakeMinAge << nStakeSplitThreshold
+        ss << nHashInterval << nSelectionPeriod << nStakeMinAge << nStakeCombineThreshold
            << bnWeight << nStakeModifierTime;
     }
     hashProofOfStake = Hash(ss.begin(), ss.end());
@@ -937,7 +937,7 @@ int64_t Stake::GetSplitThreshold() const {
 }
 
 void Stake::SetSplitThreshold(int64_t v) {
-    nStakeSplitThreshold = GetStakeCombineThreshold();
+    nStakeCombineThreshold = GetStakeCombineThreshold();
 }
 
 void Stake::MarkStake(const COutPoint& out, unsigned int nTime) {
