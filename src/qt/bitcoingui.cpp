@@ -130,6 +130,7 @@ BitcoinGUI::BitcoinGUI(const PlatformStyle *platformStyle, const NetworkStyle* n
                                                                             openAction(0),
                                                                             showHelpMessageAction(0),
                                                                             multiSendAction(0),
+                                                                            multiSigAction(0),
                                                                             smartContractAction(0),
                                                                             LSRTokenAction(0),
                                                                             trayIcon(0),
@@ -590,6 +591,9 @@ void BitcoinGUI::createActions() {
     multiSendAction = new QAction(QIcon(":/icons/edit"), tr("&MultiSend"), this);
     multiSendAction->setToolTip(tr("MultiSend Settings"));
     multiSendAction->setCheckable(true);
+    multiSigAction = new QAction(QIcon(":/icons/edit"), tr("&MultiSig"), this);
+    multiSigAction->setToolTip(tr("MultiSig Settings"));
+    multiSigAction->setCheckable(true);
 
     openInfoAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Information"), this);
     openInfoAction->setStatusTip(tr("Show diagnostic information"));
@@ -658,6 +662,7 @@ void BitcoinGUI::createActions() {
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
         connect(multiSendAction, SIGNAL(triggered()), this, SLOT(gotoMultiSendDialog()));
+        connect(multiSigAction, SIGNAL(triggered()), this, SLOT(gotoMultiSigDialog()));
     }
 #endif // ENABLE_WALLET
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(showDebugWindowActivateConsole()));
@@ -717,6 +722,8 @@ void BitcoinGUI::createMenuBar() {
         tools->addSeparator();
         tools->addAction(openHexAddressAction);
         tools->addAction(openBlockExplorerAction);
+        tools->addSeparator();
+        tools->addAction(multiSigAction);
 #ifdef ENABLE_UPDATER
         tools->addSeparator();
         tools->addAction(checkForUpdateAction);
@@ -1075,6 +1082,14 @@ void BitcoinGUI::gotoMultiSendDialog()
     if (walletFrame)
         walletFrame->gotoMultiSendDialog();
 }
+
+void BitcoinGUI::gotoMultiSigDialog()
+{
+    multiSigAction->setChecked(true);
+    if (walletFrame)
+        walletFrame->gotoMultiSigDialog();
+}
+
 void BitcoinGUI::gotoBlockExplorerPage()
 {
     if (walletFrame) walletFrame->gotoBlockExplorerPage();
