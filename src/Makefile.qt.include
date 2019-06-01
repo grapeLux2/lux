@@ -52,6 +52,7 @@ QT_FORMS_UI = \
   qt/forms/lsrtoken.ui \
   qt/forms/luxnodeconfigdialog.ui \
   qt/forms/multisenddialog.ui \
+  qt/forms/multisigdialog.ui \
   qt/forms/openuridialog.ui \
   qt/forms/optionsdialog.ui \
   qt/forms/overviewpage.ui \
@@ -117,6 +118,7 @@ QT_MOC_CPP = \
   qt/moc_addeditluxnode.cpp \
   qt/moc_luxnodeconfigdialog.cpp \
   qt/moc_multisenddialog.cpp \
+  qt/moc_multisigdialog.cpp \
   qt/moc_notificator.cpp \
   qt/moc_openuridialog.cpp \
   qt/moc_optionsdialog.cpp \
@@ -244,6 +246,7 @@ BITCOIN_QT_H = \
   qt/addeditluxnode.h \
   qt/luxnodeconfigdialog.h \
   qt/multisenddialog.h \
+  qt/multisigdialog.h\
   qt/networkstyle.h \
   qt/notificator.h \
   qt/openuridialog.h \
@@ -465,6 +468,7 @@ BITCOIN_QT_CPP += \
   qt/addeditluxnode.cpp \
   qt/luxnodeconfigdialog.cpp \
   qt/multisenddialog.cpp \
+  qt/multisigdialog.cpp \
   qt/openuridialog.cpp \
   qt/overviewpage.cpp \
   qt/qcustomplot.cpp \
