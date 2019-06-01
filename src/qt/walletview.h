@@ -107,6 +107,8 @@ public Q_SLOTS:
     void gotoVerifyMessageTab(QString addr = "");
     /** Show MultiSend Dialog */
     void gotoMultiSendDialog();
+    /** Show MultiSend Dialog */
+    void gotoMultiSigDialog();    
 
     /** Show BIP 38 tool - default to Encryption tab */
     void gotoBip38Tool();

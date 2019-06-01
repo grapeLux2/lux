@@ -26,6 +26,7 @@
 #include "smartcontract.h"
 #include "lsrtoken.h"
 #include "restoredialog.h"
+#include "multisigdialog.h"
 
 #include "ui_interface.h"
 
@@ -338,6 +339,12 @@ void WalletView::gotoMultiSendDialog()
     MultiSendDialog* multiSendDialog = new MultiSendDialog(platformStyle, this);
     multiSendDialog->setModel(walletModel);
     multiSendDialog->show();
+}
+void WalletView::gotoMultiSigDialog()
+{
+    MultisigDialog* multisig = new MultisigDialog(this);
+    multisig->setModel(walletModel);
+    multisig->show();
 }
 
 bool WalletView::handlePaymentRequest(const SendCoinsRecipient& recipient)

@@ -200,6 +200,13 @@ void WalletFrame::gotoMultiSendDialog()
         walletView->gotoMultiSendDialog();
 }
 
+void WalletFrame::gotoMultiSigDialog()
+{
+    WalletView* walletView = currentWalletView();
+
+    if (walletView)
+        walletView->gotoMultiSigDialog();
+}
 
 void WalletFrame::encryptWallet(bool status)
 {
