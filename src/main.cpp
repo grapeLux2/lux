@@ -1948,7 +1948,7 @@ CAmount GetProofOfWorkReward(int64_t nFees, int nHeight)
     if (Params().NetworkID() == CBaseChainParams::REGTEST) {
         if (nHeight < 5) {
             return 50000 * COIN;
-        }
+        } 
         else return COIN + nFees;
     }
 
@@ -7185,15 +7185,15 @@ static bool ProcessMessage(CNode* pfrom, const string &strCommand, CDataStream& 
 
 int ActiveProtocol()
 {
-#if 0
     const CChainParams& chainParams = Params();
+    
     if (chainActive.Height() < chainParams.StartDevfeeBlock() - 10) { //Start banning 10 blocks earlier
+        
         return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
     } else {
+        
         return PROTOCOL_VERSION;
     }
-#endif
-    return MIN_PROTO_VERSION;
 }
 
 // requires LOCK(cs_vRecvMsg)
