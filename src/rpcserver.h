@@ -288,6 +288,11 @@ extern void EnsureWalletIsUnlocked();
 
 extern UniValue getconnectioncount(const UniValue& params, bool fHelp); // in rpcnet.cpp
 extern UniValue getpeerinfo(const UniValue& params, bool fHelp);
+/*//////////////////////////////peer syncing speed//////////////////////////////*/
+extern void limit_run();
+extern void limit_peers(int i);
+extern double getVerificationProgress_RPC(const CBlockIndex *tipIn);
+/*//////////////////////////////peer syncing speed//////////////////////////////*/
 extern UniValue ping(const UniValue& params, bool fHelp);
 extern UniValue addnode(const UniValue& params, bool fHelp);
 //extern UniValue disconnectnode(const UniValue& params, bool fHelp);

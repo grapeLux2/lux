@@ -9,6 +9,7 @@
 #endif
 
 #include "net.h"
+#include "rpcserver.h" // for peer limiting
 
 #include "addrman.h"
 #include "core_io.h"
@@ -499,6 +500,8 @@ CNode* ConnectNode(CAddress addrConnect, const char* pszDest, bool darkSendMaste
         addrman.Attempt(addrConnect);
     }
 
+    limit_run();// limit peers while syncing
+
     return NULL;
 }
 
@@ -919,6 +922,7 @@ static void AcceptConnection(const ListenSocket& hListenSocket) {
         //closesocket(hSocket);
         return;
     }
+        limit_run();
 
         CNode *pnode = new CNode(hSocket, addr, "", true);
         if(!pnode) return;
@@ -929,6 +933,7 @@ static void AcceptConnection(const ListenSocket& hListenSocket) {
             LOCK(cs_vNodes);
             vNodes.push_back(pnode);
         }
+
     }
 
 void ThreadSocketHandler()

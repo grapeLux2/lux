@@ -3,7 +3,6 @@
 // Copyright (c) 2015-2018 The Luxcore developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #include "rpcserver.h"
 #include "core_io.h"
 #include "clientversion.h"
@@ -154,9 +153,72 @@ UniValue getpeerinfo(const UniValue& params, bool fHelp)
 
         ret.push_back(obj);
     }
-
     return ret;
 }
+
+
+/*//////////////////////////////peer syncing speed//////////////////////////////*/
+double getVerificationProgress_RPC(const CBlockIndex *tipIn)
+{
+    CBlockIndex *tip = const_cast<CBlockIndex *>(tipIn);
+    if (!tip)
+    {
+        LOCK(cs_main);
+        tip = chainActive.Tip();
+    }
+    return Checkpoints::GuessVerificationProgress(Params().Checkpoints(), tip);
+}
+
+void limit_run() 
+{ 
+    /*
+    why are there so many for loops? 
+    you can't use a function like bannedNode->CloseSocketDisconnect()
+    inside of 'for (CNodeStats& stats : vstats)' or it will crash the 
+    wallet. however if you 'return' before the second loop the wallet 
+    will not crash and you can still use 
+    the auto array functions of the for loop
+    */
+
+    int SYNC = getVerificationProgress_RPC(NULL)*100;
+    if (SYNC > 99){// if we are not syncing return
+        //return;
+        assert(0);
+    }
+
+    int i=0;
+    LOCK(cs_main);
+    vector<CNodeStats> vstats;
+    CopyNodeStats(vstats);
+
+    for (CNodeStats& stats : vstats) {
+
+        i++; 
+    }
+
+    for (int k = 0; i > k; k++){
+        limit_peers(k);
+    }
+
+}
+
+void limit_peers(int i)
+{
+    LOCK(cs_main);
+    vector<CNodeStats> vstats;
+    CopyNodeStats(vstats);
+    for (CNodeStats& stats : vstats) {
+
+        if (i > 3){
+            string strNode = stats.addrName;
+            CNode *bannedNode = FindNode(strNode);
+            bannedNode->CloseSocketDisconnect(); 
+        }   
+        return;
+    }
+}
+/*//////////////////////////////peer syncing speed//////////////////////////////*/
+    
 
 UniValue addnode(const UniValue& params, bool fHelp)
 {
