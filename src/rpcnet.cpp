@@ -182,8 +182,7 @@ void limit_run()
 
     int SYNC = getVerificationProgress_RPC(NULL)*100;
     if (SYNC > 99){// if we are not syncing return
-        //return;
-        assert(0);
+        return;
     }
 
     int i=0;
