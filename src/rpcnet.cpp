@@ -196,7 +196,9 @@ void limit_run()
     }
 
     for (int k = 0; i > k; k++){
-        limit_peers(k);
+        if (i > 3){
+            limit_peers(k);
+        }
     }
 
 }
@@ -207,12 +209,9 @@ void limit_peers(int i)
     vector<CNodeStats> vstats;
     CopyNodeStats(vstats);
     for (CNodeStats& stats : vstats) {
-
-        if (i > 3){
-            string strNode = stats.addrName;
-            CNode *bannedNode = FindNode(strNode);
-            bannedNode->CloseSocketDisconnect(); 
-        }   
+        string strNode = stats.addrName;
+        CNode *bannedNode = FindNode(strNode);
+        bannedNode->CloseSocketDisconnect();   
         return;
     }
 }
