@@ -158,7 +158,7 @@ UniValue getpeerinfo(const UniValue& params, bool fHelp)
 
 
 /*//////////////////////////////peer syncing speed//////////////////////////////*/
-double getVerificationProgress_RPC(const CBlockIndex *tipIn)
+int getVerificationProgress_RPC(const CBlockIndex *tipIn)
 {
     CBlockIndex *tip = const_cast<CBlockIndex *>(tipIn);
     if (!tip)
@@ -166,7 +166,7 @@ double getVerificationProgress_RPC(const CBlockIndex *tipIn)
         LOCK(cs_main);
         tip = chainActive.Tip();
     }
-    return Checkpoints::GuessVerificationProgress(Params().Checkpoints(), tip);
+    return (Checkpoints::GuessVerificationProgress(Params().Checkpoints(), tip)*100);
 }
 
 void limit_run() 
@@ -180,7 +180,7 @@ void limit_run()
     the auto array functions of the for loop
     */
 
-    int SYNC = getVerificationProgress_RPC(NULL)*100;
+    int SYNC = getVerificationProgress_RPC(NULL);
     if (SYNC > 99){// if we are not syncing return
         return;
     }
