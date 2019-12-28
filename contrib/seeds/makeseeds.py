@@ -146,7 +146,7 @@ def main():
     # Require service bit 1.
     ips = [ip for ip in ips if (ip['service'] & 1) == 1]
     # Require at least 50% 30-day uptime. (To be changed once seeder becomes more established)
-    ips = [ip for ip in ips if ip['uptime'] > 1]
+    ips = [ip for ip in ips if ip['uptime'] > 2]
     # Require a known and recent user agent.
     ips = [ip for ip in ips if PATTERN_AGENT.match(ip['agent'])]
     # Sort by availability (and use last success as tie breaker)

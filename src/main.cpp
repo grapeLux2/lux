@@ -1039,8 +1039,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
     BOOST_FOREACH(const CTxOut& txout, tx.vout) {
         mempoolbanname = txout.scriptPubKey.IsMempoolbanned();
         if (mempoolbanname) {
-           LogPrintf("AcceptToMemoryPool : not accepting transaction %s with mempoolbanned output (%s)", tx.GetHash().ToString().c_str(), mempoolbanname);
-           return error("AcceptToMemoryPool : not accepting transaction %s with mempoolbanned output (%s)", tx.GetHash().ToString().c_str(), mempoolbanname);
+           LogPrintf("AcceptToMemoryPool : not accepting transaction %s with mempoolbanned output (%s)\n", tx.GetHash().ToString().c_str(), mempoolbanname);
+           return error("AcceptToMemoryPool : not accepting transaction %s with mempoolbanned output (%s)\n", tx.GetHash().ToString().c_str(), mempoolbanname);
         }
     }
     
@@ -1055,10 +1055,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
             if (mempoolbanname) {
                 LogPrintf("CTxMemPool::accept() : not accepting transaction %s with mempoolbanned input (%s)\n", tx.GetHash().ToString().c_str(), mempoolbanname);
-                return error("CTxMemPool::accept() : not accepting transaction %s with mempoolbanned input (%s)", tx.GetHash().ToString().c_str(), mempoolbanname);
+                return error("CTxMemPool::accept() : not accepting transaction %s with mempoolbanned input (%s)\n", tx.GetHash().ToString().c_str(), mempoolbanname);
             }
-        } else {
-            LogPrintf("Tx Not found");
         }
     }
 
@@ -1948,7 +1946,7 @@ CAmount GetProofOfWorkReward(int64_t nFees, int nHeight)
     if (Params().NetworkID() == CBaseChainParams::REGTEST) {
         if (nHeight < 5) {
             return 50000 * COIN;
-        } 
+        }
         else return COIN + nFees;
     }
 
@@ -7185,15 +7183,15 @@ static bool ProcessMessage(CNode* pfrom, const string &strCommand, CDataStream& 
 
 int ActiveProtocol()
 {
+#if 0
     const CChainParams& chainParams = Params();
-    
     if (chainActive.Height() < chainParams.StartDevfeeBlock() - 10) { //Start banning 10 blocks earlier
-        
         return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
     } else {
-        
         return PROTOCOL_VERSION;
     }
+#endif
+    return MIN_PROTO_VERSION;
 }
 
 // requires LOCK(cs_vRecvMsg)
