@@ -1936,7 +1936,12 @@ uint256 GetProofOfStakeLimit(int nHeight)
 
 CAmount GetProofOfWorkReward(int64_t nFees, int nHeight)
 {
-    CAmount nSubsidy = 1 * COIN;
+    CAmount nSubsidy = 8 * COIN;
+    
+    /** Local subsidy reduction stuff (stuff we calculate on) */
+    int nCalcHeight = 0; // Height on which we're going to be calculating
+    int nTimesToReduce = 0; // Var for storing the total times when need to reduce the subsidy
+
     const CChainParams& chainParams = Params();
         
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
@@ -1960,10 +1965,14 @@ CAmount GetProofOfWorkReward(int64_t nFees, int nHeight)
         nSubsidy = 1000 * COIN;
     } else if (nHeight >= 500 && nHeight < chainParams.StartDevfeeBlock()) {
         nSubsidy = 10 * COIN;
-    } else if (nHeight >= chainParams.StartDevfeeBlock() && nHeight < 6000000) {
+    } else if (nHeight >= chainParams.StartDevfeeBlock() && nHeight < chainParams.StartSubsidyReductionBlock()) {
         nSubsidy = 8 * COIN;
     } else {
-        nSubsidy = 1 * COIN;
+        nCalcHeight = nHeight - chainParams.HeightDelta();
+        nTimesToReduce = (int)nCalcHeight / chainParams.BlocksBetweenReductions();
+        for (int i = 0; i <= nTimesToReduce; ++i) {
+            nSubsidy -= (nSubsidy / 100) * 1;
+        }
     }
 
     if (nHeight < LAST_HEIGHT_FEE_BLOCK) {
@@ -1977,18 +1986,26 @@ CAmount GetProofOfWorkReward(int64_t nFees, int nHeight)
 
 CAmount GetProofOfStakeReward(int64_t nFees, int nHeight)
 {
-    CAmount nSubsidy = STATIC_POS_REWARD;
+    CAmount nSubsidy = 1.5 * COIN;
     const CChainParams& chainParams = Params();
+
+    /** Local subsidy reduction stuff (stuff we calculate on) */
+    int nCalcHeight = 0; // Height on which we're going to be calculating
+    int nTimesToReduce = 0; // Var for storing the total times when need to reduce the subsidy
 
     // First 100,000 blocks double stake for masternode ready
     if (nHeight < 100000) {
         nSubsidy = 2 * COIN;
     } else if (nHeight >= 100000 && nHeight < chainParams.StartDevfeeBlock()) {
         nSubsidy = 1 * COIN;
-    } else if (nHeight >= chainParams.StartDevfeeBlock() && nHeight < 6000000) {
+    } else if (nHeight >= chainParams.StartDevfeeBlock() && nHeight < chainParams.StartSubsidyReductionBlock()) {
         nSubsidy = 1.5 * COIN;
     } else {
-        nSubsidy = 1 * COIN;
+        nCalcHeight = nHeight - chainParams.HeightDelta();
+        nTimesToReduce = (int)nCalcHeight / chainParams.BlocksBetweenReductions();
+        for (int i = 0; i <= nTimesToReduce; ++i) {
+            nSubsidy -= (nSubsidy / 100) * 1;
+        }
     }
     
     return nSubsidy + nFees;
@@ -2004,10 +2021,8 @@ CAmount GetMasternodePosReward(int nHeight, CAmount blockValue)
         } else if (nHeight == chainParams.PreminePayment()) {
             ret = blockValue * 250000; //premine mint
         }
-    } else if (nHeight >= chainParams.StartDevfeeBlock() && nHeight < 6000000) {
-        ret = blockValue * 0.25; //25% for masternodes after this reward change
     } else {
-        ret = blockValue * 0.4; //40% for masternode
+        ret = blockValue * 0.25; //25% for masternodes after this reward change
     }
     return ret;
 }
@@ -2724,14 +2739,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         view.SetBestBlock(pindex->GetBlockHash());
         return true;
     }
-
-//    if (pindex->nHeight <= Params().LAST_POW_BLOCK() && block.IsProofOfStake())
-//        return state.DoS(100, error("%s: PoS period not active", __func__),
-//            REJECT_INVALID, "PoS-early");
-
-    if (pindex->nHeight > Params().LAST_POW_BLOCK() && block.IsProofOfWork())
-        return state.DoS(100, error("%s: PoW period ended", __func__),
-            REJECT_INVALID, "PoW-ended");
 
     bool fScriptChecks = pindex->nHeight >= Checkpoints::GetTotalBlocksEstimate(chainparams.Checkpoints());
 
@@ -4555,9 +4562,6 @@ bool CheckWork(const CBlock &block, CBlockIndex* const pindexPrev)
         return error("%s: null pindexPrev for block %s", __func__, block.GetHash().GetHex());
 
     unsigned int nBitsRequired = GetNextWorkRequired(pindexPrev, &block, consensusParams, block.IsProofOfStake());
-
-    if (block.IsProofOfWork() && pindexPrev->nHeight + 1 > chainParams.LAST_POW_BLOCK())
-        return error("%s: reject proof-of-work at height %d", __func__, pindexPrev->nHeight + 1);
 
     if (block.nBits != nBitsRequired)
         return error("%s: incorrect proof of work at %d", __func__, pindexPrev->nHeight + 1);
@@ -7183,15 +7187,12 @@ static bool ProcessMessage(CNode* pfrom, const string &strCommand, CDataStream& 
 
 int ActiveProtocol()
 {
-#if 0
     const CChainParams& chainParams = Params();
-    if (chainActive.Height() < chainParams.StartDevfeeBlock() - 10) { //Start banning 10 blocks earlier
+    if (chainActive.Height() < chainParams.StartSubsidyReductionBlock() - 10) { //Start banning 10 blocks earlier
         return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
     } else {
         return PROTOCOL_VERSION;
     }
-#endif
-    return MIN_PROTO_VERSION;
 }
 
 // requires LOCK(cs_vRecvMsg)
